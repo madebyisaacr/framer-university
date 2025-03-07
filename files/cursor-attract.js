@@ -1,3 +1,22 @@
+function _mergeNamespaces(n, m) {
+  for (var i = 0; i < m.length; i++) {
+    const e = m[i];
+    if (typeof e !== "string" && !Array.isArray(e)) {
+      for (const k in e) {
+        if (k !== "default" && !(k in n)) {
+          const d = Object.getOwnPropertyDescriptor(e, k);
+          if (d) {
+            Object.defineProperty(n, k, d.get ? d : {
+              enumerable: true,
+              get: () => e[k]
+            });
+          }
+        }
+      }
+    }
+  }
+  return Object.freeze(Object.defineProperty(n, Symbol.toStringTag, { value: "Module" }));
+}
 var Z$1 = Object.defineProperty;
 var z = (s, t, e) => t in s ? Z$1(s, t, { enumerable: true, configurable: true, writable: true, value: e }) : s[t] = e;
 var p = (s, t, e) => z(s, typeof t != "symbol" ? t + "" : t, e);
@@ -1423,6 +1442,9 @@ var Nt = class {
 }, It = Nt;
 var Ci = It;
 var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
+function getDefaultExportFromCjs(x2) {
+  return x2 && x2.__esModule && Object.prototype.hasOwnProperty.call(x2, "default") ? x2["default"] : x2;
+}
 var lodash$1 = { exports: {} };
 /**
  * @license
@@ -1794,17 +1816,17 @@ function requireLodash() {
         return func.apply(thisArg, args);
       }
       function arrayAggregator(array, setter, iteratee, accumulator) {
-        var index = -1, length = array == null ? 0 : array.length;
-        while (++index < length) {
-          var value = array[index];
+        var index2 = -1, length = array == null ? 0 : array.length;
+        while (++index2 < length) {
+          var value = array[index2];
           setter(accumulator, value, iteratee(value), array);
         }
         return accumulator;
       }
       function arrayEach(array, iteratee) {
-        var index = -1, length = array == null ? 0 : array.length;
-        while (++index < length) {
-          if (iteratee(array[index], index, array) === false) {
+        var index2 = -1, length = array == null ? 0 : array.length;
+        while (++index2 < length) {
+          if (iteratee(array[index2], index2, array) === false) {
             break;
           }
         }
@@ -1820,19 +1842,19 @@ function requireLodash() {
         return array;
       }
       function arrayEvery(array, predicate) {
-        var index = -1, length = array == null ? 0 : array.length;
-        while (++index < length) {
-          if (!predicate(array[index], index, array)) {
+        var index2 = -1, length = array == null ? 0 : array.length;
+        while (++index2 < length) {
+          if (!predicate(array[index2], index2, array)) {
             return false;
           }
         }
         return true;
       }
       function arrayFilter(array, predicate) {
-        var index = -1, length = array == null ? 0 : array.length, resIndex = 0, result = [];
-        while (++index < length) {
-          var value = array[index];
-          if (predicate(value, index, array)) {
+        var index2 = -1, length = array == null ? 0 : array.length, resIndex = 0, result = [];
+        while (++index2 < length) {
+          var value = array[index2];
+          if (predicate(value, index2, array)) {
             result[resIndex++] = value;
           }
         }
@@ -1843,35 +1865,35 @@ function requireLodash() {
         return !!length && baseIndexOf(array, value, 0) > -1;
       }
       function arrayIncludesWith(array, value, comparator) {
-        var index = -1, length = array == null ? 0 : array.length;
-        while (++index < length) {
-          if (comparator(value, array[index])) {
+        var index2 = -1, length = array == null ? 0 : array.length;
+        while (++index2 < length) {
+          if (comparator(value, array[index2])) {
             return true;
           }
         }
         return false;
       }
       function arrayMap(array, iteratee) {
-        var index = -1, length = array == null ? 0 : array.length, result = Array(length);
-        while (++index < length) {
-          result[index] = iteratee(array[index], index, array);
+        var index2 = -1, length = array == null ? 0 : array.length, result = Array(length);
+        while (++index2 < length) {
+          result[index2] = iteratee(array[index2], index2, array);
         }
         return result;
       }
       function arrayPush(array, values) {
-        var index = -1, length = values.length, offset = array.length;
-        while (++index < length) {
-          array[offset + index] = values[index];
+        var index2 = -1, length = values.length, offset = array.length;
+        while (++index2 < length) {
+          array[offset + index2] = values[index2];
         }
         return array;
       }
       function arrayReduce(array, iteratee, accumulator, initAccum) {
-        var index = -1, length = array == null ? 0 : array.length;
+        var index2 = -1, length = array == null ? 0 : array.length;
         if (initAccum && length) {
-          accumulator = array[++index];
+          accumulator = array[++index2];
         }
-        while (++index < length) {
-          accumulator = iteratee(accumulator, array[index], index, array);
+        while (++index2 < length) {
+          accumulator = iteratee(accumulator, array[index2], index2, array);
         }
         return accumulator;
       }
@@ -1886,9 +1908,9 @@ function requireLodash() {
         return accumulator;
       }
       function arraySome(array, predicate) {
-        var index = -1, length = array == null ? 0 : array.length;
-        while (++index < length) {
-          if (predicate(array[index], index, array)) {
+        var index2 = -1, length = array == null ? 0 : array.length;
+        while (++index2 < length) {
+          if (predicate(array[index2], index2, array)) {
             return true;
           }
         }
@@ -1912,10 +1934,10 @@ function requireLodash() {
         return result;
       }
       function baseFindIndex(array, predicate, fromIndex, fromRight) {
-        var length = array.length, index = fromIndex + (fromRight ? 1 : -1);
-        while (fromRight ? index-- : ++index < length) {
-          if (predicate(array[index], index, array)) {
-            return index;
+        var length = array.length, index2 = fromIndex + (fromRight ? 1 : -1);
+        while (fromRight ? index2-- : ++index2 < length) {
+          if (predicate(array[index2], index2, array)) {
+            return index2;
           }
         }
         return -1;
@@ -1924,10 +1946,10 @@ function requireLodash() {
         return value === value ? strictIndexOf(array, value, fromIndex) : baseFindIndex(array, baseIsNaN, fromIndex);
       }
       function baseIndexOfWith(array, value, fromIndex, comparator) {
-        var index = fromIndex - 1, length = array.length;
-        while (++index < length) {
-          if (comparator(array[index], value)) {
-            return index;
+        var index2 = fromIndex - 1, length = array.length;
+        while (++index2 < length) {
+          if (comparator(array[index2], value)) {
+            return index2;
           }
         }
         return -1;
@@ -1950,8 +1972,8 @@ function requireLodash() {
         };
       }
       function baseReduce(collection, iteratee, accumulator, initAccum, eachFunc) {
-        eachFunc(collection, function(value, index, collection2) {
-          accumulator = initAccum ? (initAccum = false, value) : iteratee(accumulator, value, index, collection2);
+        eachFunc(collection, function(value, index2, collection2) {
+          accumulator = initAccum ? (initAccum = false, value) : iteratee(accumulator, value, index2, collection2);
         });
         return accumulator;
       }
@@ -1964,9 +1986,9 @@ function requireLodash() {
         return array;
       }
       function baseSum(array, iteratee) {
-        var result, index = -1, length = array.length;
-        while (++index < length) {
-          var current = iteratee(array[index]);
+        var result, index2 = -1, length = array.length;
+        while (++index2 < length) {
+          var current = iteratee(array[index2]);
           if (current !== undefined$1) {
             result = result === undefined$1 ? current : result + current;
           }
@@ -1974,9 +1996,9 @@ function requireLodash() {
         return result;
       }
       function baseTimes(n, iteratee) {
-        var index = -1, result = Array(n);
-        while (++index < n) {
-          result[index] = iteratee(index);
+        var index2 = -1, result = Array(n);
+        while (++index2 < n) {
+          result[index2] = iteratee(index2);
         }
         return result;
       }
@@ -2002,16 +2024,16 @@ function requireLodash() {
         return cache.has(key);
       }
       function charsStartIndex(strSymbols, chrSymbols) {
-        var index = -1, length = strSymbols.length;
-        while (++index < length && baseIndexOf(chrSymbols, strSymbols[index], 0) > -1) {
+        var index2 = -1, length = strSymbols.length;
+        while (++index2 < length && baseIndexOf(chrSymbols, strSymbols[index2], 0) > -1) {
         }
-        return index;
+        return index2;
       }
       function charsEndIndex(strSymbols, chrSymbols) {
-        var index = strSymbols.length;
-        while (index-- && baseIndexOf(chrSymbols, strSymbols[index], 0) > -1) {
+        var index2 = strSymbols.length;
+        while (index2-- && baseIndexOf(chrSymbols, strSymbols[index2], 0) > -1) {
         }
-        return index;
+        return index2;
       }
       function countHolders(array, placeholder) {
         var length = array.length, result = 0;
@@ -2044,9 +2066,9 @@ function requireLodash() {
         return result;
       }
       function mapToArray(map) {
-        var index = -1, result = Array(map.size);
+        var index2 = -1, result = Array(map.size);
         map.forEach(function(value, key) {
-          result[++index] = [key, value];
+          result[++index2] = [key, value];
         });
         return result;
       }
@@ -2056,47 +2078,47 @@ function requireLodash() {
         };
       }
       function replaceHolders(array, placeholder) {
-        var index = -1, length = array.length, resIndex = 0, result = [];
-        while (++index < length) {
-          var value = array[index];
+        var index2 = -1, length = array.length, resIndex = 0, result = [];
+        while (++index2 < length) {
+          var value = array[index2];
           if (value === placeholder || value === PLACEHOLDER) {
-            array[index] = PLACEHOLDER;
-            result[resIndex++] = index;
+            array[index2] = PLACEHOLDER;
+            result[resIndex++] = index2;
           }
         }
         return result;
       }
       function setToArray(set) {
-        var index = -1, result = Array(set.size);
+        var index2 = -1, result = Array(set.size);
         set.forEach(function(value) {
-          result[++index] = value;
+          result[++index2] = value;
         });
         return result;
       }
       function setToPairs(set) {
-        var index = -1, result = Array(set.size);
+        var index2 = -1, result = Array(set.size);
         set.forEach(function(value) {
-          result[++index] = [value, value];
+          result[++index2] = [value, value];
         });
         return result;
       }
       function strictIndexOf(array, value, fromIndex) {
-        var index = fromIndex - 1, length = array.length;
-        while (++index < length) {
-          if (array[index] === value) {
-            return index;
+        var index2 = fromIndex - 1, length = array.length;
+        while (++index2 < length) {
+          if (array[index2] === value) {
+            return index2;
           }
         }
         return -1;
       }
       function strictLastIndexOf(array, value, fromIndex) {
-        var index = fromIndex + 1;
-        while (index--) {
-          if (array[index] === value) {
-            return index;
+        var index2 = fromIndex + 1;
+        while (index2--) {
+          if (array[index2] === value) {
+            return index2;
           }
         }
-        return index;
+        return index2;
       }
       function stringSize(string) {
         return hasUnicode(string) ? unicodeSize(string) : asciiSize(string);
@@ -2105,10 +2127,10 @@ function requireLodash() {
         return hasUnicode(string) ? unicodeToArray(string) : asciiToArray(string);
       }
       function trimmedEndIndex(string) {
-        var index = string.length;
-        while (index-- && reWhitespace.test(string.charAt(index))) {
+        var index2 = string.length;
+        while (index2-- && reWhitespace.test(string.charAt(index2))) {
         }
-        return index;
+        return index2;
       }
       var unescapeHtmlChar = basePropertyOf(htmlUnescapes);
       function unicodeSize(string) {
@@ -2274,15 +2296,15 @@ function requireLodash() {
           return result2;
         }
         function lazyValue() {
-          var array = this.__wrapped__.value(), dir = this.__dir__, isArr = isArray(array), isRight = dir < 0, arrLength = isArr ? array.length : 0, view = getView(0, arrLength, this.__views__), start = view.start, end = view.end, length = end - start, index = isRight ? end : start - 1, iteratees = this.__iteratees__, iterLength = iteratees.length, resIndex = 0, takeCount = nativeMin(length, this.__takeCount__);
+          var array = this.__wrapped__.value(), dir = this.__dir__, isArr = isArray(array), isRight = dir < 0, arrLength = isArr ? array.length : 0, view = getView(0, arrLength, this.__views__), start = view.start, end = view.end, length = end - start, index2 = isRight ? end : start - 1, iteratees = this.__iteratees__, iterLength = iteratees.length, resIndex = 0, takeCount = nativeMin(length, this.__takeCount__);
           if (!isArr || !isRight && arrLength == length && takeCount == length) {
             return baseWrapperValue(array, this.__actions__);
           }
           var result2 = [];
           outer:
             while (length-- && resIndex < takeCount) {
-              index += dir;
-              var iterIndex = -1, value = array[index];
+              index2 += dir;
+              var iterIndex = -1, value = array[index2];
               while (++iterIndex < iterLength) {
                 var data = iteratees[iterIndex], iteratee2 = data.iteratee, type = data.type, computed = iteratee2(value);
                 if (type == LAZY_MAP_FLAG) {
@@ -2302,10 +2324,10 @@ function requireLodash() {
         LazyWrapper.prototype = baseCreate(baseLodash.prototype);
         LazyWrapper.prototype.constructor = LazyWrapper;
         function Hash(entries) {
-          var index = -1, length = entries == null ? 0 : entries.length;
+          var index2 = -1, length = entries == null ? 0 : entries.length;
           this.clear();
-          while (++index < length) {
-            var entry = entries[index];
+          while (++index2 < length) {
+            var entry = entries[index2];
             this.set(entry[0], entry[1]);
           }
         }
@@ -2342,10 +2364,10 @@ function requireLodash() {
         Hash.prototype.has = hashHas;
         Hash.prototype.set = hashSet;
         function ListCache(entries) {
-          var index = -1, length = entries == null ? 0 : entries.length;
+          var index2 = -1, length = entries == null ? 0 : entries.length;
           this.clear();
-          while (++index < length) {
-            var entry = entries[index];
+          while (++index2 < length) {
+            var entry = entries[index2];
             this.set(entry[0], entry[1]);
           }
         }
@@ -2354,33 +2376,33 @@ function requireLodash() {
           this.size = 0;
         }
         function listCacheDelete(key) {
-          var data = this.__data__, index = assocIndexOf(data, key);
-          if (index < 0) {
+          var data = this.__data__, index2 = assocIndexOf(data, key);
+          if (index2 < 0) {
             return false;
           }
           var lastIndex = data.length - 1;
-          if (index == lastIndex) {
+          if (index2 == lastIndex) {
             data.pop();
           } else {
-            splice.call(data, index, 1);
+            splice.call(data, index2, 1);
           }
           --this.size;
           return true;
         }
         function listCacheGet(key) {
-          var data = this.__data__, index = assocIndexOf(data, key);
-          return index < 0 ? undefined$1 : data[index][1];
+          var data = this.__data__, index2 = assocIndexOf(data, key);
+          return index2 < 0 ? undefined$1 : data[index2][1];
         }
         function listCacheHas(key) {
           return assocIndexOf(this.__data__, key) > -1;
         }
         function listCacheSet(key, value) {
-          var data = this.__data__, index = assocIndexOf(data, key);
-          if (index < 0) {
+          var data = this.__data__, index2 = assocIndexOf(data, key);
+          if (index2 < 0) {
             ++this.size;
             data.push([key, value]);
           } else {
-            data[index][1] = value;
+            data[index2][1] = value;
           }
           return this;
         }
@@ -2390,10 +2412,10 @@ function requireLodash() {
         ListCache.prototype.has = listCacheHas;
         ListCache.prototype.set = listCacheSet;
         function MapCache(entries) {
-          var index = -1, length = entries == null ? 0 : entries.length;
+          var index2 = -1, length = entries == null ? 0 : entries.length;
           this.clear();
-          while (++index < length) {
-            var entry = entries[index];
+          while (++index2 < length) {
+            var entry = entries[index2];
             this.set(entry[0], entry[1]);
           }
         }
@@ -2428,10 +2450,10 @@ function requireLodash() {
         MapCache.prototype.has = mapCacheHas;
         MapCache.prototype.set = mapCacheSet;
         function SetCache(values2) {
-          var index = -1, length = values2 == null ? 0 : values2.length;
+          var index2 = -1, length = values2 == null ? 0 : values2.length;
           this.__data__ = new MapCache();
-          while (++index < length) {
-            this.add(values2[index]);
+          while (++index2 < length) {
+            this.add(values2[index2]);
           }
         }
         function setCacheAdd(value) {
@@ -2550,9 +2572,9 @@ function requireLodash() {
           }
         }
         function baseAt(object, paths) {
-          var index = -1, length = paths.length, result2 = Array2(length), skip = object == null;
-          while (++index < length) {
-            result2[index] = skip ? undefined$1 : get(object, paths[index]);
+          var index2 = -1, length = paths.length, result2 = Array2(length), skip = object == null;
+          while (++index2 < length) {
+            result2[index2] = skip ? undefined$1 : get(object, paths[index2]);
           }
           return result2;
         }
@@ -2656,7 +2678,7 @@ function requireLodash() {
           }, wait);
         }
         function baseDifference(array, values2, iteratee2, comparator) {
-          var index = -1, includes2 = arrayIncludes, isCommon = true, length = array.length, result2 = [], valuesLength = values2.length;
+          var index2 = -1, includes2 = arrayIncludes, isCommon = true, length = array.length, result2 = [], valuesLength = values2.length;
           if (!length) {
             return result2;
           }
@@ -2672,8 +2694,8 @@ function requireLodash() {
             values2 = new SetCache(values2);
           }
           outer:
-            while (++index < length) {
-              var value = array[index], computed = iteratee2 == null ? value : iteratee2(value);
+            while (++index2 < length) {
+              var value = array[index2], computed = iteratee2 == null ? value : iteratee2(value);
               value = comparator || value !== 0 ? value : 0;
               if (isCommon && computed === computed) {
                 var valuesIndex = valuesLength;
@@ -2693,16 +2715,16 @@ function requireLodash() {
         var baseEachRight = createBaseEach(baseForOwnRight, true);
         function baseEvery(collection, predicate) {
           var result2 = true;
-          baseEach(collection, function(value, index, collection2) {
-            result2 = !!predicate(value, index, collection2);
+          baseEach(collection, function(value, index2, collection2) {
+            result2 = !!predicate(value, index2, collection2);
             return result2;
           });
           return result2;
         }
         function baseExtremum(array, iteratee2, comparator) {
-          var index = -1, length = array.length;
-          while (++index < length) {
-            var value = array[index], current = iteratee2(value);
+          var index2 = -1, length = array.length;
+          while (++index2 < length) {
+            var value = array[index2], current = iteratee2(value);
             if (current != null && (computed === undefined$1 ? current === current && !isSymbol(current) : comparator(current, computed))) {
               var computed = current, result2 = value;
             }
@@ -2727,19 +2749,19 @@ function requireLodash() {
         }
         function baseFilter(collection, predicate) {
           var result2 = [];
-          baseEach(collection, function(value, index, collection2) {
-            if (predicate(value, index, collection2)) {
+          baseEach(collection, function(value, index2, collection2) {
+            if (predicate(value, index2, collection2)) {
               result2.push(value);
             }
           });
           return result2;
         }
         function baseFlatten(array, depth, predicate, isStrict, result2) {
-          var index = -1, length = array.length;
+          var index2 = -1, length = array.length;
           predicate || (predicate = isFlattenable);
           result2 || (result2 = []);
-          while (++index < length) {
-            var value = array[index];
+          while (++index2 < length) {
+            var value = array[index2];
             if (depth > 0 && predicate(value)) {
               if (depth > 1) {
                 baseFlatten(value, depth - 1, predicate, isStrict, result2);
@@ -2767,11 +2789,11 @@ function requireLodash() {
         }
         function baseGet(object, path) {
           path = castPath(path, object);
-          var index = 0, length = path.length;
-          while (object != null && index < length) {
-            object = object[toKey(path[index++])];
+          var index2 = 0, length = path.length;
+          while (object != null && index2 < length) {
+            object = object[toKey(path[index2++])];
           }
-          return index && index == length ? object : undefined$1;
+          return index2 && index2 == length ? object : undefined$1;
         }
         function baseGetAllKeys(object, keysFunc, symbolsFunc) {
           var result2 = keysFunc(object);
@@ -2806,10 +2828,10 @@ function requireLodash() {
             caches[othIndex] = !comparator && (iteratee2 || length >= 120 && array.length >= 120) ? new SetCache(othIndex && array) : undefined$1;
           }
           array = arrays[0];
-          var index = -1, seen = caches[0];
+          var index2 = -1, seen = caches[0];
           outer:
-            while (++index < length && result2.length < maxLength) {
-              var value = array[index], computed = iteratee2 ? iteratee2(value) : value;
+            while (++index2 < length && result2.length < maxLength) {
+              var value = array[index2], computed = iteratee2 ? iteratee2(value) : value;
               value = comparator || value !== 0 ? value : 0;
               if (!(seen ? cacheHas(seen, computed) : includes2(result2, computed, comparator))) {
                 othIndex = othLength;
@@ -2891,19 +2913,19 @@ function requireLodash() {
           return isObjectLike(value) && getTag(value) == mapTag;
         }
         function baseIsMatch(object, source, matchData, customizer) {
-          var index = matchData.length, length = index, noCustomizer = !customizer;
+          var index2 = matchData.length, length = index2, noCustomizer = !customizer;
           if (object == null) {
             return !length;
           }
           object = Object2(object);
-          while (index--) {
-            var data = matchData[index];
+          while (index2--) {
+            var data = matchData[index2];
             if (noCustomizer && data[2] ? data[1] !== object[data[0]] : !(data[0] in object)) {
               return false;
             }
           }
-          while (++index < length) {
-            data = matchData[index];
+          while (++index2 < length) {
+            data = matchData[index2];
             var key = data[0], objValue = object[key], srcValue = data[1];
             if (noCustomizer && data[2]) {
               if (objValue === undefined$1 && !(key in object)) {
@@ -2977,9 +2999,9 @@ function requireLodash() {
           return value < other;
         }
         function baseMap(collection, iteratee2) {
-          var index = -1, result2 = isArrayLike(collection) ? Array2(collection.length) : [];
+          var index2 = -1, result2 = isArrayLike(collection) ? Array2(collection.length) : [];
           baseEach(collection, function(value, key, collection2) {
-            result2[++index] = iteratee2(value, key, collection2);
+            result2[++index2] = iteratee2(value, key, collection2);
           });
           return result2;
         }
@@ -3082,13 +3104,13 @@ function requireLodash() {
           } else {
             iteratees = [identity];
           }
-          var index = -1;
+          var index2 = -1;
           iteratees = arrayMap(iteratees, baseUnary(getIteratee()));
           var result2 = baseMap(collection, function(value, key, collection2) {
             var criteria = arrayMap(iteratees, function(iteratee2) {
               return iteratee2(value);
             });
-            return { "criteria": criteria, "index": ++index, "value": value };
+            return { "criteria": criteria, "index": ++index2, "value": value };
           });
           return baseSortBy(result2, function(object, other) {
             return compareMultiple(object, other, orders);
@@ -3100,9 +3122,9 @@ function requireLodash() {
           });
         }
         function basePickBy(object, paths, predicate) {
-          var index = -1, length = paths.length, result2 = {};
-          while (++index < length) {
-            var path = paths[index], value = baseGet(object, path);
+          var index2 = -1, length = paths.length, result2 = {};
+          while (++index2 < length) {
+            var path = paths[index2], value = baseGet(object, path);
             if (predicate(value, path)) {
               baseSet(result2, castPath(path, object), value);
             }
@@ -3115,15 +3137,15 @@ function requireLodash() {
           };
         }
         function basePullAll(array, values2, iteratee2, comparator) {
-          var indexOf2 = comparator ? baseIndexOfWith : baseIndexOf, index = -1, length = values2.length, seen = array;
+          var indexOf2 = comparator ? baseIndexOfWith : baseIndexOf, index2 = -1, length = values2.length, seen = array;
           if (array === values2) {
             values2 = copyArray(values2);
           }
           if (iteratee2) {
             seen = arrayMap(array, baseUnary(iteratee2));
           }
-          while (++index < length) {
-            var fromIndex = 0, value = values2[index], computed = iteratee2 ? iteratee2(value) : value;
+          while (++index2 < length) {
+            var fromIndex = 0, value = values2[index2], computed = iteratee2 ? iteratee2(value) : value;
             while ((fromIndex = indexOf2(seen, computed, fromIndex, comparator)) > -1) {
               if (seen !== array) {
                 splice.call(seen, fromIndex, 1);
@@ -3136,13 +3158,13 @@ function requireLodash() {
         function basePullAt(array, indexes) {
           var length = array ? indexes.length : 0, lastIndex = length - 1;
           while (length--) {
-            var index = indexes[length];
-            if (length == lastIndex || index !== previous) {
-              var previous = index;
-              if (isIndex(index)) {
-                splice.call(array, index, 1);
+            var index2 = indexes[length];
+            if (length == lastIndex || index2 !== previous) {
+              var previous = index2;
+              if (isIndex(index2)) {
+                splice.call(array, index2, 1);
               } else {
-                baseUnset(array, index);
+                baseUnset(array, index2);
               }
             }
           }
@@ -3152,9 +3174,9 @@ function requireLodash() {
           return lower + nativeFloor(nativeRandom() * (upper - lower + 1));
         }
         function baseRange(start, end, step, fromRight) {
-          var index = -1, length = nativeMax(nativeCeil((end - start) / (step || 1)), 0), result2 = Array2(length);
+          var index2 = -1, length = nativeMax(nativeCeil((end - start) / (step || 1)), 0), result2 = Array2(length);
           while (length--) {
-            result2[fromRight ? length : ++index] = start;
+            result2[fromRight ? length : ++index2] = start;
             start += step;
           }
           return result2;
@@ -3190,17 +3212,17 @@ function requireLodash() {
             return object;
           }
           path = castPath(path, object);
-          var index = -1, length = path.length, lastIndex = length - 1, nested = object;
-          while (nested != null && ++index < length) {
-            var key = toKey(path[index]), newValue = value;
+          var index2 = -1, length = path.length, lastIndex = length - 1, nested = object;
+          while (nested != null && ++index2 < length) {
+            var key = toKey(path[index2]), newValue = value;
             if (key === "__proto__" || key === "constructor" || key === "prototype") {
               return object;
             }
-            if (index != lastIndex) {
+            if (index2 != lastIndex) {
               var objValue = nested[key];
               newValue = customizer ? customizer(objValue, key, nested) : undefined$1;
               if (newValue === undefined$1) {
-                newValue = isObject(objValue) ? objValue : isIndex(path[index + 1]) ? [] : {};
+                newValue = isObject(objValue) ? objValue : isIndex(path[index2 + 1]) ? [] : {};
               }
             }
             assignValue(nested, key, newValue);
@@ -3224,7 +3246,7 @@ function requireLodash() {
           return shuffleSelf(values(collection));
         }
         function baseSlice(array, start, end) {
-          var index = -1, length = array.length;
+          var index2 = -1, length = array.length;
           if (start < 0) {
             start = -start > length ? 0 : length + start;
           }
@@ -3235,15 +3257,15 @@ function requireLodash() {
           length = start > end ? 0 : end - start >>> 0;
           start >>>= 0;
           var result2 = Array2(length);
-          while (++index < length) {
-            result2[index] = array[index + start];
+          while (++index2 < length) {
+            result2[index2] = array[index2 + start];
           }
           return result2;
         }
         function baseSome(collection, predicate) {
           var result2;
-          baseEach(collection, function(value, index, collection2) {
-            result2 = predicate(value, index, collection2);
+          baseEach(collection, function(value, index2, collection2) {
+            result2 = predicate(value, index2, collection2);
             return !result2;
           });
           return !!result2;
@@ -3294,10 +3316,10 @@ function requireLodash() {
           return nativeMin(high, MAX_ARRAY_INDEX);
         }
         function baseSortedUniq(array, iteratee2) {
-          var index = -1, length = array.length, resIndex = 0, result2 = [];
-          while (++index < length) {
-            var value = array[index], computed = iteratee2 ? iteratee2(value) : value;
-            if (!index || !eq(computed, seen)) {
+          var index2 = -1, length = array.length, resIndex = 0, result2 = [];
+          while (++index2 < length) {
+            var value = array[index2], computed = iteratee2 ? iteratee2(value) : value;
+            if (!index2 || !eq(computed, seen)) {
               var seen = computed;
               result2[resIndex++] = value === 0 ? 0 : value;
             }
@@ -3327,7 +3349,7 @@ function requireLodash() {
           return result2 == "0" && 1 / value == -Infinity ? "-0" : result2;
         }
         function baseUniq(array, iteratee2, comparator) {
-          var index = -1, includes2 = arrayIncludes, length = array.length, isCommon = true, result2 = [], seen = result2;
+          var index2 = -1, includes2 = arrayIncludes, length = array.length, isCommon = true, result2 = [], seen = result2;
           if (comparator) {
             isCommon = false;
             includes2 = arrayIncludesWith;
@@ -3343,8 +3365,8 @@ function requireLodash() {
             seen = iteratee2 ? [] : result2;
           }
           outer:
-            while (++index < length) {
-              var value = array[index], computed = iteratee2 ? iteratee2(value) : value;
+            while (++index2 < length) {
+              var value = array[index2], computed = iteratee2 ? iteratee2(value) : value;
               value = comparator || value !== 0 ? value : 0;
               if (isCommon && computed === computed) {
                 var seenIndex = seen.length;
@@ -3375,10 +3397,10 @@ function requireLodash() {
           return baseSet(object, path, updater(baseGet(object, path)), customizer);
         }
         function baseWhile(array, predicate, isDrop, fromRight) {
-          var length = array.length, index = fromRight ? length : -1;
-          while ((fromRight ? index-- : ++index < length) && predicate(array[index], index, array)) {
+          var length = array.length, index2 = fromRight ? length : -1;
+          while ((fromRight ? index2-- : ++index2 < length) && predicate(array[index2], index2, array)) {
           }
-          return isDrop ? baseSlice(array, fromRight ? 0 : index, fromRight ? index + 1 : length) : baseSlice(array, fromRight ? index + 1 : 0, fromRight ? length : index);
+          return isDrop ? baseSlice(array, fromRight ? 0 : index2, fromRight ? index2 + 1 : length) : baseSlice(array, fromRight ? index2 + 1 : 0, fromRight ? length : index2);
         }
         function baseWrapperValue(value, actions) {
           var result2 = value;
@@ -3394,22 +3416,22 @@ function requireLodash() {
           if (length < 2) {
             return length ? baseUniq(arrays[0]) : [];
           }
-          var index = -1, result2 = Array2(length);
-          while (++index < length) {
-            var array = arrays[index], othIndex = -1;
+          var index2 = -1, result2 = Array2(length);
+          while (++index2 < length) {
+            var array = arrays[index2], othIndex = -1;
             while (++othIndex < length) {
-              if (othIndex != index) {
-                result2[index] = baseDifference(result2[index] || array, arrays[othIndex], iteratee2, comparator);
+              if (othIndex != index2) {
+                result2[index2] = baseDifference(result2[index2] || array, arrays[othIndex], iteratee2, comparator);
               }
             }
           }
           return baseUniq(baseFlatten(result2, 1), iteratee2, comparator);
         }
         function baseZipObject(props, values2, assignFunc) {
-          var index = -1, length = props.length, valsLength = values2.length, result2 = {};
-          while (++index < length) {
-            var value = index < valsLength ? values2[index] : undefined$1;
-            assignFunc(result2, props[index], value);
+          var index2 = -1, length = props.length, valsLength = values2.length, result2 = {};
+          while (++index2 < length) {
+            var value = index2 < valsLength ? values2[index2] : undefined$1;
+            assignFunc(result2, props[index2], value);
           }
           return result2;
         }
@@ -3477,14 +3499,14 @@ function requireLodash() {
           return 0;
         }
         function compareMultiple(object, other, orders) {
-          var index = -1, objCriteria = object.criteria, othCriteria = other.criteria, length = objCriteria.length, ordersLength = orders.length;
-          while (++index < length) {
-            var result2 = compareAscending(objCriteria[index], othCriteria[index]);
+          var index2 = -1, objCriteria = object.criteria, othCriteria = other.criteria, length = objCriteria.length, ordersLength = orders.length;
+          while (++index2 < length) {
+            var result2 = compareAscending(objCriteria[index2], othCriteria[index2]);
             if (result2) {
-              if (index >= ordersLength) {
+              if (index2 >= ordersLength) {
                 return result2;
               }
-              var order = orders[index];
+              var order = orders[index2];
               return result2 * (order == "desc" ? -1 : 1);
             }
           }
@@ -3522,19 +3544,19 @@ function requireLodash() {
           return result2;
         }
         function copyArray(source, array) {
-          var index = -1, length = source.length;
+          var index2 = -1, length = source.length;
           array || (array = Array2(length));
-          while (++index < length) {
-            array[index] = source[index];
+          while (++index2 < length) {
+            array[index2] = source[index2];
           }
           return array;
         }
         function copyObject(source, props, object, customizer) {
           var isNew = !object;
           object || (object = {});
-          var index = -1, length = props.length;
-          while (++index < length) {
-            var key = props[index];
+          var index2 = -1, length = props.length;
+          while (++index2 < length) {
+            var key = props[index2];
             var newValue = customizer ? customizer(object[key], source[key], key, object, source) : undefined$1;
             if (newValue === undefined$1) {
               newValue = source[key];
@@ -3561,17 +3583,17 @@ function requireLodash() {
         }
         function createAssigner(assigner) {
           return baseRest(function(object, sources) {
-            var index = -1, length = sources.length, customizer = length > 1 ? sources[length - 1] : undefined$1, guard = length > 2 ? sources[2] : undefined$1;
+            var index2 = -1, length = sources.length, customizer = length > 1 ? sources[length - 1] : undefined$1, guard = length > 2 ? sources[2] : undefined$1;
             customizer = assigner.length > 3 && typeof customizer == "function" ? (length--, customizer) : undefined$1;
             if (guard && isIterateeCall(sources[0], sources[1], guard)) {
               customizer = length < 3 ? undefined$1 : customizer;
               length = 1;
             }
             object = Object2(object);
-            while (++index < length) {
-              var source = sources[index];
+            while (++index2 < length) {
+              var source = sources[index2];
               if (source) {
-                assigner(object, source, index, customizer);
+                assigner(object, source, index2, customizer);
               }
             }
             return object;
@@ -3585,9 +3607,9 @@ function requireLodash() {
             if (!isArrayLike(collection)) {
               return eachFunc(collection, iteratee2);
             }
-            var length = collection.length, index = fromRight ? length : -1, iterable = Object2(collection);
-            while (fromRight ? index-- : ++index < length) {
-              if (iteratee2(iterable[index], index, iterable) === false) {
+            var length = collection.length, index2 = fromRight ? length : -1, iterable = Object2(collection);
+            while (fromRight ? index2-- : ++index2 < length) {
+              if (iteratee2(iterable[index2], index2, iterable) === false) {
                 break;
               }
             }
@@ -3596,9 +3618,9 @@ function requireLodash() {
         }
         function createBaseFor(fromRight) {
           return function(object, iteratee2, keysFunc) {
-            var index = -1, iterable = Object2(object), props = keysFunc(object), length = props.length;
+            var index2 = -1, iterable = Object2(object), props = keysFunc(object), length = props.length;
             while (length--) {
-              var key = props[fromRight ? length : ++index];
+              var key = props[fromRight ? length : ++index2];
               if (iteratee2(iterable[key], key, iterable) === false) {
                 break;
               }
@@ -3656,9 +3678,9 @@ function requireLodash() {
         function createCurry(func, bitmask, arity) {
           var Ctor = createCtor(func);
           function wrapper() {
-            var length = arguments.length, args = Array2(length), index = length, placeholder = getHolder(wrapper);
-            while (index--) {
-              args[index] = arguments[index];
+            var length = arguments.length, args = Array2(length), index2 = length, placeholder = getHolder(wrapper);
+            while (index2--) {
+              args[index2] = arguments[index2];
             }
             var holders = length < 3 && args[0] !== placeholder && args[length - 1] !== placeholder ? [] : replaceHolders(args, placeholder);
             length -= holders.length;
@@ -3691,18 +3713,18 @@ function requireLodash() {
                 return iteratee2(iterable[key], key, iterable);
               };
             }
-            var index = findIndexFunc(collection, predicate, fromIndex);
-            return index > -1 ? iterable[iteratee2 ? collection[index] : index] : undefined$1;
+            var index2 = findIndexFunc(collection, predicate, fromIndex);
+            return index2 > -1 ? iterable[iteratee2 ? collection[index2] : index2] : undefined$1;
           };
         }
         function createFlow(fromRight) {
           return flatRest(function(funcs) {
-            var length = funcs.length, index = length, prereq = LodashWrapper.prototype.thru;
+            var length = funcs.length, index2 = length, prereq = LodashWrapper.prototype.thru;
             if (fromRight) {
               funcs.reverse();
             }
-            while (index--) {
-              var func = funcs[index];
+            while (index2--) {
+              var func = funcs[index2];
               if (typeof func != "function") {
                 throw new TypeError2(FUNC_ERROR_TEXT);
               }
@@ -3710,9 +3732,9 @@ function requireLodash() {
                 var wrapper = new LodashWrapper([], true);
               }
             }
-            index = wrapper ? index : length;
-            while (++index < length) {
-              func = funcs[index];
+            index2 = wrapper ? index2 : length;
+            while (++index2 < length) {
+              func = funcs[index2];
               var funcName = getFuncName(func), data = funcName == "wrapper" ? getData(func) : undefined$1;
               if (data && isLaziable(data[0]) && data[1] == (WRAP_ARY_FLAG | WRAP_CURRY_FLAG | WRAP_PARTIAL_FLAG | WRAP_REARG_FLAG) && !data[4].length && data[9] == 1) {
                 wrapper = wrapper[getFuncName(data[0])].apply(wrapper, data[3]);
@@ -3725,9 +3747,9 @@ function requireLodash() {
               if (wrapper && args.length == 1 && isArray(value)) {
                 return wrapper.plant(value).value();
               }
-              var index2 = 0, result2 = length ? funcs[index2].apply(this, args) : value;
-              while (++index2 < length) {
-                result2 = funcs[index2].call(this, result2);
+              var index3 = 0, result2 = length ? funcs[index3].apply(this, args) : value;
+              while (++index3 < length) {
+                result2 = funcs[index3].call(this, result2);
               }
               return result2;
             };
@@ -3736,9 +3758,9 @@ function requireLodash() {
         function createHybrid(func, bitmask, thisArg, partials, holders, partialsRight, holdersRight, argPos, ary2, arity) {
           var isAry = bitmask & WRAP_ARY_FLAG, isBind = bitmask & WRAP_BIND_FLAG, isBindKey = bitmask & WRAP_BIND_KEY_FLAG, isCurried = bitmask & (WRAP_CURRY_FLAG | WRAP_CURRY_RIGHT_FLAG), isFlip = bitmask & WRAP_FLIP_FLAG, Ctor = isBindKey ? undefined$1 : createCtor(func);
           function wrapper() {
-            var length = arguments.length, args = Array2(length), index = length;
-            while (index--) {
-              args[index] = arguments[index];
+            var length = arguments.length, args = Array2(length), index2 = length;
+            while (index2--) {
+              args[index2] = arguments[index2];
             }
             if (isCurried) {
               var placeholder = getHolder(wrapper), holdersCount = countHolders(args, placeholder);
@@ -4006,13 +4028,13 @@ function requireLodash() {
           if (arrStacked && othStacked) {
             return arrStacked == other && othStacked == array;
           }
-          var index = -1, result2 = true, seen = bitmask & COMPARE_UNORDERED_FLAG ? new SetCache() : undefined$1;
+          var index2 = -1, result2 = true, seen = bitmask & COMPARE_UNORDERED_FLAG ? new SetCache() : undefined$1;
           stack.set(array, other);
           stack.set(other, array);
-          while (++index < arrLength) {
-            var arrValue = array[index], othValue = other[index];
+          while (++index2 < arrLength) {
+            var arrValue = array[index2], othValue = other[index2];
             if (customizer) {
-              var compared = isPartial ? customizer(othValue, arrValue, index, other, array, stack) : customizer(arrValue, othValue, index, array, other, stack);
+              var compared = isPartial ? customizer(othValue, arrValue, index2, other, array, stack) : customizer(arrValue, othValue, index2, array, other, stack);
             }
             if (compared !== undefined$1) {
               if (compared) {
@@ -4090,9 +4112,9 @@ function requireLodash() {
           if (objLength != othLength && !isPartial) {
             return false;
           }
-          var index = objLength;
-          while (index--) {
-            var key = objProps[index];
+          var index2 = objLength;
+          while (index2--) {
+            var key = objProps[index2];
             if (!(isPartial ? key in other : hasOwnProperty.call(other, key))) {
               return false;
             }
@@ -4106,8 +4128,8 @@ function requireLodash() {
           stack.set(object, other);
           stack.set(other, object);
           var skipCtor = isPartial;
-          while (++index < objLength) {
-            key = objProps[index];
+          while (++index2 < objLength) {
+            key = objProps[index2];
             var objValue = object[key], othValue = other[key];
             if (customizer) {
               var compared = isPartial ? customizer(othValue, objValue, key, other, object, stack) : customizer(objValue, othValue, key, object, other, stack);
@@ -4231,9 +4253,9 @@ function requireLodash() {
           };
         }
         function getView(start, end, transforms) {
-          var index = -1, length = transforms.length;
-          while (++index < length) {
-            var data = transforms[index], size2 = data.size;
+          var index2 = -1, length = transforms.length;
+          while (++index2 < length) {
+            var data = transforms[index2], size2 = data.size;
             switch (data.type) {
               case "drop":
                 start += size2;
@@ -4257,15 +4279,15 @@ function requireLodash() {
         }
         function hasPath(object, path, hasFunc) {
           path = castPath(path, object);
-          var index = -1, length = path.length, result2 = false;
-          while (++index < length) {
-            var key = toKey(path[index]);
+          var index2 = -1, length = path.length, result2 = false;
+          while (++index2 < length) {
+            var key = toKey(path[index2]);
             if (!(result2 = object != null && hasFunc(object, key))) {
               break;
             }
             object = object[key];
           }
-          if (result2 || ++index != length) {
+          if (result2 || ++index2 != length) {
             return result2;
           }
           length = object == null ? 0 : object.length;
@@ -4333,13 +4355,13 @@ function requireLodash() {
           length = length == null ? MAX_SAFE_INTEGER : length;
           return !!length && (type == "number" || type != "symbol" && reIsUint.test(value)) && (value > -1 && value % 1 == 0 && value < length);
         }
-        function isIterateeCall(value, index, object) {
+        function isIterateeCall(value, index2, object) {
           if (!isObject(object)) {
             return false;
           }
-          var type = typeof index;
-          if (type == "number" ? isArrayLike(object) && isIndex(index, object.length) : type == "string" && index in object) {
-            return eq(object[index], value);
+          var type = typeof index2;
+          if (type == "number" ? isArrayLike(object) && isIndex(index2, object.length) : type == "string" && index2 in object) {
+            return eq(object[index2], value);
           }
           return false;
         }
@@ -4448,14 +4470,14 @@ function requireLodash() {
         function overRest(func, start, transform2) {
           start = nativeMax(start === undefined$1 ? func.length - 1 : start, 0);
           return function() {
-            var args = arguments, index = -1, length = nativeMax(args.length - start, 0), array = Array2(length);
-            while (++index < length) {
-              array[index] = args[start + index];
+            var args = arguments, index2 = -1, length = nativeMax(args.length - start, 0), array = Array2(length);
+            while (++index2 < length) {
+              array[index2] = args[start + index2];
             }
-            index = -1;
+            index2 = -1;
             var otherArgs = Array2(start + 1);
-            while (++index < start) {
-              otherArgs[index] = args[index];
+            while (++index2 < start) {
+              otherArgs[index2] = args[index2];
             }
             otherArgs[start] = transform2(array);
             return apply(func, this, otherArgs);
@@ -4467,8 +4489,8 @@ function requireLodash() {
         function reorder(array, indexes) {
           var arrLength = array.length, length = nativeMin(indexes.length, arrLength), oldArray = copyArray(array);
           while (length--) {
-            var index = indexes[length];
-            array[length] = isIndex(index, arrLength) ? oldArray[index] : undefined$1;
+            var index2 = indexes[length];
+            array[length] = isIndex(index2, arrLength) ? oldArray[index2] : undefined$1;
           }
           return array;
         }
@@ -4506,12 +4528,12 @@ function requireLodash() {
           };
         }
         function shuffleSelf(array, size2) {
-          var index = -1, length = array.length, lastIndex = length - 1;
+          var index2 = -1, length = array.length, lastIndex = length - 1;
           size2 = size2 === undefined$1 ? length : size2;
-          while (++index < size2) {
-            var rand = baseRandom(index, lastIndex), value = array[rand];
-            array[rand] = array[index];
-            array[index] = value;
+          while (++index2 < size2) {
+            var rand = baseRandom(index2, lastIndex), value = array[rand];
+            array[rand] = array[index2];
+            array[index2] = value;
           }
           array.length = size2;
           return array;
@@ -4575,16 +4597,16 @@ function requireLodash() {
           if (!length || size2 < 1) {
             return [];
           }
-          var index = 0, resIndex = 0, result2 = Array2(nativeCeil(length / size2));
-          while (index < length) {
-            result2[resIndex++] = baseSlice(array, index, index += size2);
+          var index2 = 0, resIndex = 0, result2 = Array2(nativeCeil(length / size2));
+          while (index2 < length) {
+            result2[resIndex++] = baseSlice(array, index2, index2 += size2);
           }
           return result2;
         }
         function compact(array) {
-          var index = -1, length = array == null ? 0 : array.length, resIndex = 0, result2 = [];
-          while (++index < length) {
-            var value = array[index];
+          var index2 = -1, length = array == null ? 0 : array.length, resIndex = 0, result2 = [];
+          while (++index2 < length) {
+            var value = array[index2];
             if (value) {
               result2[resIndex++] = value;
             }
@@ -4596,9 +4618,9 @@ function requireLodash() {
           if (!length) {
             return [];
           }
-          var args = Array2(length - 1), array = arguments[0], index = length;
-          while (index--) {
-            args[index - 1] = arguments[index];
+          var args = Array2(length - 1), array = arguments[0], index2 = length;
+          while (index2--) {
+            args[index2 - 1] = arguments[index2];
           }
           return arrayPush(isArray(array) ? copyArray(array) : [array], baseFlatten(args, 1));
         }
@@ -4658,23 +4680,23 @@ function requireLodash() {
           if (!length) {
             return -1;
           }
-          var index = fromIndex == null ? 0 : toInteger(fromIndex);
-          if (index < 0) {
-            index = nativeMax(length + index, 0);
+          var index2 = fromIndex == null ? 0 : toInteger(fromIndex);
+          if (index2 < 0) {
+            index2 = nativeMax(length + index2, 0);
           }
-          return baseFindIndex(array, getIteratee(predicate, 3), index);
+          return baseFindIndex(array, getIteratee(predicate, 3), index2);
         }
         function findLastIndex(array, predicate, fromIndex) {
           var length = array == null ? 0 : array.length;
           if (!length) {
             return -1;
           }
-          var index = length - 1;
+          var index2 = length - 1;
           if (fromIndex !== undefined$1) {
-            index = toInteger(fromIndex);
-            index = fromIndex < 0 ? nativeMax(length + index, 0) : nativeMin(index, length - 1);
+            index2 = toInteger(fromIndex);
+            index2 = fromIndex < 0 ? nativeMax(length + index2, 0) : nativeMin(index2, length - 1);
           }
-          return baseFindIndex(array, getIteratee(predicate, 3), index, true);
+          return baseFindIndex(array, getIteratee(predicate, 3), index2, true);
         }
         function flatten(array) {
           var length = array == null ? 0 : array.length;
@@ -4693,9 +4715,9 @@ function requireLodash() {
           return baseFlatten(array, depth);
         }
         function fromPairs(pairs) {
-          var index = -1, length = pairs == null ? 0 : pairs.length, result2 = {};
-          while (++index < length) {
-            var pair = pairs[index];
+          var index2 = -1, length = pairs == null ? 0 : pairs.length, result2 = {};
+          while (++index2 < length) {
+            var pair = pairs[index2];
             result2[pair[0]] = pair[1];
           }
           return result2;
@@ -4708,11 +4730,11 @@ function requireLodash() {
           if (!length) {
             return -1;
           }
-          var index = fromIndex == null ? 0 : toInteger(fromIndex);
-          if (index < 0) {
-            index = nativeMax(length + index, 0);
+          var index2 = fromIndex == null ? 0 : toInteger(fromIndex);
+          if (index2 < 0) {
+            index2 = nativeMax(length + index2, 0);
           }
-          return baseIndexOf(array, value, index);
+          return baseIndexOf(array, value, index2);
         }
         function initial(array) {
           var length = array == null ? 0 : array.length;
@@ -4751,12 +4773,12 @@ function requireLodash() {
           if (!length) {
             return -1;
           }
-          var index = length;
+          var index2 = length;
           if (fromIndex !== undefined$1) {
-            index = toInteger(fromIndex);
-            index = index < 0 ? nativeMax(length + index, 0) : nativeMin(index, length - 1);
+            index2 = toInteger(fromIndex);
+            index2 = index2 < 0 ? nativeMax(length + index2, 0) : nativeMin(index2, length - 1);
           }
-          return value === value ? strictLastIndexOf(array, value, index) : baseFindIndex(array, baseIsNaN, index, true);
+          return value === value ? strictLastIndexOf(array, value, index2) : baseFindIndex(array, baseIsNaN, index2, true);
         }
         function nth(array, n) {
           return array && array.length ? baseNth(array, toInteger(n)) : undefined$1;
@@ -4773,8 +4795,8 @@ function requireLodash() {
         }
         var pullAt = flatRest(function(array, indexes) {
           var length = array == null ? 0 : array.length, result2 = baseAt(array, indexes);
-          basePullAt(array, arrayMap(indexes, function(index) {
-            return isIndex(index, length) ? +index : index;
+          basePullAt(array, arrayMap(indexes, function(index2) {
+            return isIndex(index2, length) ? +index2 : index2;
           }).sort(compareAscending));
           return result2;
         });
@@ -4783,13 +4805,13 @@ function requireLodash() {
           if (!(array && array.length)) {
             return result2;
           }
-          var index = -1, indexes = [], length = array.length;
+          var index2 = -1, indexes = [], length = array.length;
           predicate = getIteratee(predicate, 3);
-          while (++index < length) {
-            var value = array[index];
-            if (predicate(value, index, array)) {
+          while (++index2 < length) {
+            var value = array[index2];
+            if (predicate(value, index2, array)) {
               result2.push(value);
-              indexes.push(index);
+              indexes.push(index2);
             }
           }
           basePullAt(array, indexes);
@@ -4821,9 +4843,9 @@ function requireLodash() {
         function sortedIndexOf(array, value) {
           var length = array == null ? 0 : array.length;
           if (length) {
-            var index = baseSortedIndex(array, value);
-            if (index < length && eq(array[index], value)) {
-              return index;
+            var index2 = baseSortedIndex(array, value);
+            if (index2 < length && eq(array[index2], value)) {
+              return index2;
             }
           }
           return -1;
@@ -4837,9 +4859,9 @@ function requireLodash() {
         function sortedLastIndexOf(array, value) {
           var length = array == null ? 0 : array.length;
           if (length) {
-            var index = baseSortedIndex(array, value, true) - 1;
-            if (eq(array[index], value)) {
-              return index;
+            var index2 = baseSortedIndex(array, value, true) - 1;
+            if (eq(array[index2], value)) {
+              return index2;
             }
           }
           return -1;
@@ -4912,8 +4934,8 @@ function requireLodash() {
               return true;
             }
           });
-          return baseTimes(length, function(index) {
-            return arrayMap(array, baseProperty(index));
+          return baseTimes(length, function(index2) {
+            return arrayMap(array, baseProperty(index2));
           });
         }
         function unzipWith(array, iteratee2) {
@@ -5098,9 +5120,9 @@ function requireLodash() {
           return isString(collection) ? fromIndex <= length && collection.indexOf(value, fromIndex) > -1 : !!length && baseIndexOf(collection, value, fromIndex) > -1;
         }
         var invokeMap = baseRest(function(collection, path, args) {
-          var index = -1, isFunc = typeof path == "function", result2 = isArrayLike(collection) ? Array2(collection.length) : [];
+          var index2 = -1, isFunc = typeof path == "function", result2 = isArrayLike(collection) ? Array2(collection.length) : [];
           baseEach(collection, function(value) {
-            result2[++index] = isFunc ? apply(path, value, args) : baseInvoke(value, path, args);
+            result2[++index2] = isFunc ? apply(path, value, args) : baseInvoke(value, path, args);
           });
           return result2;
         });
@@ -5386,9 +5408,9 @@ function requireLodash() {
           transforms = transforms.length == 1 && isArray(transforms[0]) ? arrayMap(transforms[0], baseUnary(getIteratee())) : arrayMap(baseFlatten(transforms, 1), baseUnary(getIteratee()));
           var funcsLength = transforms.length;
           return baseRest(function(args) {
-            var index = -1, length = nativeMin(args.length, funcsLength);
-            while (++index < length) {
-              args[index] = transforms[index].call(this, args[index]);
+            var index2 = -1, length = nativeMin(args.length, funcsLength);
+            while (++index2 < length) {
+              args[index2] = transforms[index2].call(this, args[index2]);
             }
             return apply(func, this, args);
           });
@@ -5703,14 +5725,14 @@ function requireLodash() {
         }
         var defaults = baseRest(function(object, sources) {
           object = Object2(object);
-          var index = -1;
+          var index2 = -1;
           var length = sources.length;
           var guard = length > 2 ? sources[2] : undefined$1;
           if (guard && isIterateeCall(sources[0], sources[1], guard)) {
             length = 1;
           }
-          while (++index < length) {
-            var source = sources[index];
+          while (++index2 < length) {
+            var source = sources[index2];
             var props = keysIn(source);
             var propsIndex = -1;
             var propsLength = props.length;
@@ -5848,15 +5870,15 @@ function requireLodash() {
         }
         function result(object, path, defaultValue) {
           path = castPath(path, object);
-          var index = -1, length = path.length;
+          var index2 = -1, length = path.length;
           if (!length) {
             length = 1;
             object = undefined$1;
           }
-          while (++index < length) {
-            var value = object == null ? undefined$1 : object[toKey(path[index])];
+          while (++index2 < length) {
+            var value = object == null ? undefined$1 : object[toKey(path[index2])];
             if (value === undefined$1) {
-              index = length;
+              index2 = length;
               value = defaultValue;
             }
             object = isFunction(value) ? value.call(object) : value;
@@ -5885,8 +5907,8 @@ function requireLodash() {
               accumulator = {};
             }
           }
-          (isArrLike ? arrayEach : baseForOwn)(object, function(value, index, object2) {
-            return iteratee2(accumulator, value, index, object2);
+          (isArrLike ? arrayEach : baseForOwn)(object, function(value, index2, object2) {
+            return iteratee2(accumulator, value, index2, object2);
           });
           return accumulator;
         }
@@ -5968,9 +5990,9 @@ function requireLodash() {
           }
           return baseRandom(lower, upper);
         }
-        var camelCase = createCompounder(function(result2, word, index) {
+        var camelCase = createCompounder(function(result2, word, index2) {
           word = word.toLowerCase();
-          return result2 + (index ? capitalize(word) : word);
+          return result2 + (index2 ? capitalize(word) : word);
         });
         function capitalize(string) {
           return upperFirst(toString2(string).toLowerCase());
@@ -5996,11 +6018,11 @@ function requireLodash() {
           string = toString2(string);
           return string && reHasRegExpChar.test(string) ? string.replace(reRegExpChar, "\\$&") : string;
         }
-        var kebabCase = createCompounder(function(result2, word, index) {
-          return result2 + (index ? "-" : "") + word.toLowerCase();
+        var kebabCase = createCompounder(function(result2, word, index2) {
+          return result2 + (index2 ? "-" : "") + word.toLowerCase();
         });
-        var lowerCase = createCompounder(function(result2, word, index) {
-          return result2 + (index ? " " : "") + word.toLowerCase();
+        var lowerCase = createCompounder(function(result2, word, index2) {
+          return result2 + (index2 ? " " : "") + word.toLowerCase();
         });
         var lowerFirst = createCaseFirst("toLowerCase");
         function pad(string, length, chars) {
@@ -6045,8 +6067,8 @@ function requireLodash() {
           var args = arguments, string = toString2(args[0]);
           return args.length < 3 ? string : string.replace(args[1], args[2]);
         }
-        var snakeCase = createCompounder(function(result2, word, index) {
-          return result2 + (index ? "_" : "") + word.toLowerCase();
+        var snakeCase = createCompounder(function(result2, word, index2) {
+          return result2 + (index2 ? "_" : "") + word.toLowerCase();
         });
         function split(string, separator, limit) {
           if (limit && typeof limit != "number" && isIterateeCall(string, separator, limit)) {
@@ -6065,8 +6087,8 @@ function requireLodash() {
           }
           return string.split(separator, limit);
         }
-        var startCase = createCompounder(function(result2, word, index) {
-          return result2 + (index ? " " : "") + upperFirst(word);
+        var startCase = createCompounder(function(result2, word, index2) {
+          return result2 + (index2 ? " " : "") + upperFirst(word);
         });
         function startsWith(string, target, position) {
           string = toString2(string);
@@ -6082,7 +6104,7 @@ function requireLodash() {
           string = toString2(string);
           options = assignInWith({}, options, settings, customDefaultsAssignIn);
           var imports = assignInWith({}, options.imports, settings.imports, customDefaultsAssignIn), importsKeys = keys(imports), importsValues = baseValues(imports, importsKeys);
-          var isEscaping, isEvaluating, index = 0, interpolate = options.interpolate || reNoMatch, source = "__p += '";
+          var isEscaping, isEvaluating, index2 = 0, interpolate = options.interpolate || reNoMatch, source = "__p += '";
           var reDelimiters = RegExp2(
             (options.escape || reNoMatch).source + "|" + interpolate.source + "|" + (interpolate === reInterpolate ? reEsTemplate : reNoMatch).source + "|" + (options.evaluate || reNoMatch).source + "|$",
             "g"
@@ -6090,7 +6112,7 @@ function requireLodash() {
           var sourceURL = "//# sourceURL=" + (hasOwnProperty.call(options, "sourceURL") ? (options.sourceURL + "").replace(/\s/g, " ") : "lodash.templateSources[" + ++templateCounter + "]") + "\n";
           string.replace(reDelimiters, function(match, escapeValue, interpolateValue, esTemplateValue, evaluateValue, offset) {
             interpolateValue || (interpolateValue = esTemplateValue);
-            source += string.slice(index, offset).replace(reUnescapedString, escapeStringChar);
+            source += string.slice(index2, offset).replace(reUnescapedString, escapeStringChar);
             if (escapeValue) {
               isEscaping = true;
               source += "' +\n__e(" + escapeValue + ") +\n'";
@@ -6102,7 +6124,7 @@ function requireLodash() {
             if (interpolateValue) {
               source += "' +\n((__t = (" + interpolateValue + ")) == null ? '' : __t) +\n'";
             }
-            index = offset + match.length;
+            index2 = offset + match.length;
             return match;
           });
           source += "';\n";
@@ -6202,9 +6224,9 @@ function requireLodash() {
               result2 = result2.slice(0, newEnd === undefined$1 ? end : newEnd);
             }
           } else if (string.indexOf(baseToString(separator), end) != end) {
-            var index = result2.lastIndexOf(separator);
-            if (index > -1) {
-              result2 = result2.slice(0, index);
+            var index2 = result2.lastIndexOf(separator);
+            if (index2 > -1) {
+              result2 = result2.slice(0, index2);
             }
           }
           return result2 + omission;
@@ -6213,8 +6235,8 @@ function requireLodash() {
           string = toString2(string);
           return string && reHasEscapedHtml.test(string) ? string.replace(reEscapedHtml, unescapeHtmlChar) : string;
         }
-        var upperCase = createCompounder(function(result2, word, index) {
-          return result2 + (index ? " " : "") + word.toUpperCase();
+        var upperCase = createCompounder(function(result2, word, index2) {
+          return result2 + (index2 ? " " : "") + word.toUpperCase();
         });
         var upperFirst = createCaseFirst("toUpperCase");
         function words(string, pattern, guard) {
@@ -6248,9 +6270,9 @@ function requireLodash() {
             return [toIteratee(pair[0]), pair[1]];
           });
           return baseRest(function(args) {
-            var index = -1;
-            while (++index < length) {
-              var pair = pairs[index];
+            var index2 = -1;
+            while (++index2 < length) {
+              var pair = pairs[index2];
               if (apply(pair[0], this, args)) {
                 return apply(pair[1], this, args);
               }
@@ -6366,12 +6388,12 @@ function requireLodash() {
           if (n < 1 || n > MAX_SAFE_INTEGER) {
             return [];
           }
-          var index = MAX_ARRAY_LENGTH, length = nativeMin(n, MAX_ARRAY_LENGTH);
+          var index2 = MAX_ARRAY_LENGTH, length = nativeMin(n, MAX_ARRAY_LENGTH);
           iteratee2 = getIteratee(iteratee2);
           n -= MAX_ARRAY_LENGTH;
           var result2 = baseTimes(length, iteratee2);
-          while (++index < n) {
-            iteratee2(index);
+          while (++index2 < n) {
+            iteratee2(index2);
           }
           return result2;
         }
@@ -6743,10 +6765,10 @@ function requireLodash() {
         arrayEach(["bind", "bindKey", "curry", "curryRight", "partial", "partialRight"], function(methodName) {
           lodash2[methodName].placeholder = lodash2;
         });
-        arrayEach(["drop", "take"], function(methodName, index) {
+        arrayEach(["drop", "take"], function(methodName, index2) {
           LazyWrapper.prototype[methodName] = function(n) {
             n = n === undefined$1 ? 1 : nativeMax(toInteger(n), 0);
-            var result2 = this.__filtered__ && !index ? new LazyWrapper(this) : this.clone();
+            var result2 = this.__filtered__ && !index2 ? new LazyWrapper(this) : this.clone();
             if (result2.__filtered__) {
               result2.__takeCount__ = nativeMin(n, result2.__takeCount__);
             } else {
@@ -6761,8 +6783,8 @@ function requireLodash() {
             return this.reverse()[methodName](n).reverse();
           };
         });
-        arrayEach(["filter", "map", "takeWhile"], function(methodName, index) {
-          var type = index + 1, isFilter = type == LAZY_FILTER_FLAG || type == LAZY_WHILE_FLAG;
+        arrayEach(["filter", "map", "takeWhile"], function(methodName, index2) {
+          var type = index2 + 1, isFilter = type == LAZY_FILTER_FLAG || type == LAZY_WHILE_FLAG;
           LazyWrapper.prototype[methodName] = function(iteratee2) {
             var result2 = this.clone();
             result2.__iteratees__.push({
@@ -6773,14 +6795,14 @@ function requireLodash() {
             return result2;
           };
         });
-        arrayEach(["head", "last"], function(methodName, index) {
-          var takeName = "take" + (index ? "Right" : "");
+        arrayEach(["head", "last"], function(methodName, index2) {
+          var takeName = "take" + (index2 ? "Right" : "");
           LazyWrapper.prototype[methodName] = function() {
             return this[takeName](1).value()[0];
           };
         });
-        arrayEach(["initial", "tail"], function(methodName, index) {
-          var dropName = "drop" + (index ? "" : "Right");
+        arrayEach(["initial", "tail"], function(methodName, index2) {
+          var dropName = "drop" + (index2 ? "" : "Right");
           LazyWrapper.prototype[methodName] = function() {
             return this.__filtered__ ? new LazyWrapper(this) : this[dropName](1);
           };
@@ -11996,16 +12018,16 @@ const createParseClassName = (config) => {
     let parenDepth = 0;
     let modifierStart = 0;
     let postfixModifierPosition;
-    for (let index = 0; index < className.length; index++) {
-      let currentCharacter = className[index];
+    for (let index2 = 0; index2 < className.length; index2++) {
+      let currentCharacter = className[index2];
       if (bracketDepth === 0 && parenDepth === 0) {
         if (currentCharacter === MODIFIER_SEPARATOR) {
-          modifiers.push(className.slice(modifierStart, index));
-          modifierStart = index + MODIFIER_SEPARATOR_LENGTH;
+          modifiers.push(className.slice(modifierStart, index2));
+          modifierStart = index2 + MODIFIER_SEPARATOR_LENGTH;
           continue;
         }
         if (currentCharacter === "/") {
-          postfixModifierPosition = index;
+          postfixModifierPosition = index2;
           continue;
         }
       }
@@ -12098,8 +12120,8 @@ const mergeClassList = (classList, configUtils) => {
   const classGroupsInConflict = [];
   const classNames = classList.trim().split(SPLIT_CLASSES_REGEX);
   let result = "";
-  for (let index = classNames.length - 1; index >= 0; index -= 1) {
-    const originalClassName = classNames[index];
+  for (let index2 = classNames.length - 1; index2 >= 0; index2 -= 1) {
+    const originalClassName = classNames[index2];
     const {
       isExternal,
       modifiers,
@@ -12142,12 +12164,12 @@ const mergeClassList = (classList, configUtils) => {
   return result;
 };
 function twJoin() {
-  let index = 0;
+  let index2 = 0;
   let argument;
   let resolvedValue;
   let string = "";
-  while (index < arguments.length) {
-    if (argument = arguments[index++]) {
+  while (index2 < arguments.length) {
+    if (argument = arguments[index2++]) {
       if (resolvedValue = toValue(argument)) {
         string && (string += " ");
         string += resolvedValue;
@@ -14534,6 +14556,417 @@ const getDefaultConfig = () => {
   };
 };
 const twMerge = /* @__PURE__ */ createTailwindMerge(getDefaultConfig);
+var src;
+var hasRequiredSrc;
+function requireSrc() {
+  if (hasRequiredSrc) return src;
+  hasRequiredSrc = 1;
+  src = {
+    decomp: polygonDecomp,
+    quickDecomp: polygonQuickDecomp,
+    isSimple: polygonIsSimple,
+    removeCollinearPoints: polygonRemoveCollinearPoints,
+    removeDuplicatePoints: polygonRemoveDuplicatePoints,
+    makeCCW: polygonMakeCCW
+  };
+  function lineInt(l1, l2, precision) {
+    precision = precision || 0;
+    var i = [0, 0];
+    var a1, b1, c1, a2, b2, c2, det;
+    a1 = l1[1][1] - l1[0][1];
+    b1 = l1[0][0] - l1[1][0];
+    c1 = a1 * l1[0][0] + b1 * l1[0][1];
+    a2 = l2[1][1] - l2[0][1];
+    b2 = l2[0][0] - l2[1][0];
+    c2 = a2 * l2[0][0] + b2 * l2[0][1];
+    det = a1 * b2 - a2 * b1;
+    if (!scalar_eq(det, 0, precision)) {
+      i[0] = (b2 * c1 - b1 * c2) / det;
+      i[1] = (a1 * c2 - a2 * c1) / det;
+    }
+    return i;
+  }
+  function lineSegmentsIntersect(p1, p2, q1, q2) {
+    var dx = p2[0] - p1[0];
+    var dy = p2[1] - p1[1];
+    var da = q2[0] - q1[0];
+    var db = q2[1] - q1[1];
+    if (da * dy - db * dx === 0) {
+      return false;
+    }
+    var s = (dx * (q1[1] - p1[1]) + dy * (p1[0] - q1[0])) / (da * dy - db * dx);
+    var t = (da * (p1[1] - q1[1]) + db * (q1[0] - p1[0])) / (db * dx - da * dy);
+    return s >= 0 && s <= 1 && t >= 0 && t <= 1;
+  }
+  function triangleArea(a, b, c) {
+    return (b[0] - a[0]) * (c[1] - a[1]) - (c[0] - a[0]) * (b[1] - a[1]);
+  }
+  function isLeft(a, b, c) {
+    return triangleArea(a, b, c) > 0;
+  }
+  function isLeftOn(a, b, c) {
+    return triangleArea(a, b, c) >= 0;
+  }
+  function isRight(a, b, c) {
+    return triangleArea(a, b, c) < 0;
+  }
+  function isRightOn(a, b, c) {
+    return triangleArea(a, b, c) <= 0;
+  }
+  var tmpPoint1 = [], tmpPoint2 = [];
+  function collinear(a, b, c, thresholdAngle) {
+    if (!thresholdAngle) {
+      return triangleArea(a, b, c) === 0;
+    } else {
+      var ab = tmpPoint1, bc = tmpPoint2;
+      ab[0] = b[0] - a[0];
+      ab[1] = b[1] - a[1];
+      bc[0] = c[0] - b[0];
+      bc[1] = c[1] - b[1];
+      var dot = ab[0] * bc[0] + ab[1] * bc[1], magA = Math.sqrt(ab[0] * ab[0] + ab[1] * ab[1]), magB = Math.sqrt(bc[0] * bc[0] + bc[1] * bc[1]), angle = Math.acos(dot / (magA * magB));
+      return angle < thresholdAngle;
+    }
+  }
+  function sqdist(a, b) {
+    var dx = b[0] - a[0];
+    var dy = b[1] - a[1];
+    return dx * dx + dy * dy;
+  }
+  function polygonAt(polygon, i) {
+    var s = polygon.length;
+    return polygon[i < 0 ? i % s + s : i % s];
+  }
+  function polygonClear(polygon) {
+    polygon.length = 0;
+  }
+  function polygonAppend(polygon, poly, from, to) {
+    for (var i = from; i < to; i++) {
+      polygon.push(poly[i]);
+    }
+  }
+  function polygonMakeCCW(polygon) {
+    var br2 = 0, v2 = polygon;
+    for (var i = 1; i < polygon.length; ++i) {
+      if (v2[i][1] < v2[br2][1] || v2[i][1] === v2[br2][1] && v2[i][0] > v2[br2][0]) {
+        br2 = i;
+      }
+    }
+    if (!isLeft(polygonAt(polygon, br2 - 1), polygonAt(polygon, br2), polygonAt(polygon, br2 + 1))) {
+      polygonReverse(polygon);
+      return true;
+    } else {
+      return false;
+    }
+  }
+  function polygonReverse(polygon) {
+    var tmp = [];
+    var N2 = polygon.length;
+    for (var i = 0; i !== N2; i++) {
+      tmp.push(polygon.pop());
+    }
+    for (var i = 0; i !== N2; i++) {
+      polygon[i] = tmp[i];
+    }
+  }
+  function polygonIsReflex(polygon, i) {
+    return isRight(polygonAt(polygon, i - 1), polygonAt(polygon, i), polygonAt(polygon, i + 1));
+  }
+  var tmpLine1 = [], tmpLine2 = [];
+  function polygonCanSee(polygon, a, b) {
+    var p2, dist, l1 = tmpLine1, l2 = tmpLine2;
+    if (isLeftOn(polygonAt(polygon, a + 1), polygonAt(polygon, a), polygonAt(polygon, b)) && isRightOn(polygonAt(polygon, a - 1), polygonAt(polygon, a), polygonAt(polygon, b))) {
+      return false;
+    }
+    dist = sqdist(polygonAt(polygon, a), polygonAt(polygon, b));
+    for (var i = 0; i !== polygon.length; ++i) {
+      if ((i + 1) % polygon.length === a || i === a) {
+        continue;
+      }
+      if (isLeftOn(polygonAt(polygon, a), polygonAt(polygon, b), polygonAt(polygon, i + 1)) && isRightOn(polygonAt(polygon, a), polygonAt(polygon, b), polygonAt(polygon, i))) {
+        l1[0] = polygonAt(polygon, a);
+        l1[1] = polygonAt(polygon, b);
+        l2[0] = polygonAt(polygon, i);
+        l2[1] = polygonAt(polygon, i + 1);
+        p2 = lineInt(l1, l2);
+        if (sqdist(polygonAt(polygon, a), p2) < dist) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+  function polygonCanSee2(polygon, a, b) {
+    for (var i = 0; i !== polygon.length; ++i) {
+      if (i === a || i === b || (i + 1) % polygon.length === a || (i + 1) % polygon.length === b) {
+        continue;
+      }
+      if (lineSegmentsIntersect(polygonAt(polygon, a), polygonAt(polygon, b), polygonAt(polygon, i), polygonAt(polygon, i + 1))) {
+        return false;
+      }
+    }
+    return true;
+  }
+  function polygonCopy(polygon, i, j, targetPoly) {
+    var p2 = targetPoly || [];
+    polygonClear(p2);
+    if (i < j) {
+      for (var k = i; k <= j; k++) {
+        p2.push(polygon[k]);
+      }
+    } else {
+      for (var k = 0; k <= j; k++) {
+        p2.push(polygon[k]);
+      }
+      for (var k = i; k < polygon.length; k++) {
+        p2.push(polygon[k]);
+      }
+    }
+    return p2;
+  }
+  function polygonGetCutEdges(polygon) {
+    var min = [], tmp1 = [], tmp2 = [], tmpPoly = [];
+    var nDiags = Number.MAX_VALUE;
+    for (var i = 0; i < polygon.length; ++i) {
+      if (polygonIsReflex(polygon, i)) {
+        for (var j = 0; j < polygon.length; ++j) {
+          if (polygonCanSee(polygon, i, j)) {
+            tmp1 = polygonGetCutEdges(polygonCopy(polygon, i, j, tmpPoly));
+            tmp2 = polygonGetCutEdges(polygonCopy(polygon, j, i, tmpPoly));
+            for (var k = 0; k < tmp2.length; k++) {
+              tmp1.push(tmp2[k]);
+            }
+            if (tmp1.length < nDiags) {
+              min = tmp1;
+              nDiags = tmp1.length;
+              min.push([polygonAt(polygon, i), polygonAt(polygon, j)]);
+            }
+          }
+        }
+      }
+    }
+    return min;
+  }
+  function polygonDecomp(polygon) {
+    var edges = polygonGetCutEdges(polygon);
+    if (edges.length > 0) {
+      return polygonSlice(polygon, edges);
+    } else {
+      return [polygon];
+    }
+  }
+  function polygonSlice(polygon, cutEdges) {
+    if (cutEdges.length === 0) {
+      return [polygon];
+    }
+    if (cutEdges instanceof Array && cutEdges.length && cutEdges[0] instanceof Array && cutEdges[0].length === 2 && cutEdges[0][0] instanceof Array) {
+      var polys = [polygon];
+      for (var i = 0; i < cutEdges.length; i++) {
+        var cutEdge = cutEdges[i];
+        for (var j = 0; j < polys.length; j++) {
+          var poly = polys[j];
+          var result = polygonSlice(poly, cutEdge);
+          if (result) {
+            polys.splice(j, 1);
+            polys.push(result[0], result[1]);
+            break;
+          }
+        }
+      }
+      return polys;
+    } else {
+      var cutEdge = cutEdges;
+      var i = polygon.indexOf(cutEdge[0]);
+      var j = polygon.indexOf(cutEdge[1]);
+      if (i !== -1 && j !== -1) {
+        return [
+          polygonCopy(polygon, i, j),
+          polygonCopy(polygon, j, i)
+        ];
+      } else {
+        return false;
+      }
+    }
+  }
+  function polygonIsSimple(polygon) {
+    var path = polygon, i;
+    for (i = 0; i < path.length - 1; i++) {
+      for (var j = 0; j < i - 1; j++) {
+        if (lineSegmentsIntersect(path[i], path[i + 1], path[j], path[j + 1])) {
+          return false;
+        }
+      }
+    }
+    for (i = 1; i < path.length - 2; i++) {
+      if (lineSegmentsIntersect(path[0], path[path.length - 1], path[i], path[i + 1])) {
+        return false;
+      }
+    }
+    return true;
+  }
+  function getIntersectionPoint(p1, p2, q1, q2, delta) {
+    delta = delta || 0;
+    var a1 = p2[1] - p1[1];
+    var b1 = p1[0] - p2[0];
+    var c1 = a1 * p1[0] + b1 * p1[1];
+    var a2 = q2[1] - q1[1];
+    var b2 = q1[0] - q2[0];
+    var c2 = a2 * q1[0] + b2 * q1[1];
+    var det = a1 * b2 - a2 * b1;
+    if (!scalar_eq(det, 0, delta)) {
+      return [(b2 * c1 - b1 * c2) / det, (a1 * c2 - a2 * c1) / det];
+    } else {
+      return [0, 0];
+    }
+  }
+  function polygonQuickDecomp(polygon, result, reflexVertices, steinerPoints, delta, maxlevel, level) {
+    maxlevel = maxlevel || 100;
+    level = level || 0;
+    delta = delta || 25;
+    result = typeof result !== "undefined" ? result : [];
+    reflexVertices = reflexVertices || [];
+    steinerPoints = steinerPoints || [];
+    var upperInt = [0, 0], lowerInt = [0, 0], p2 = [0, 0];
+    var upperDist = 0, lowerDist = 0, d = 0, closestDist = 0;
+    var upperIndex = 0, lowerIndex = 0, closestIndex = 0;
+    var lowerPoly = [], upperPoly = [];
+    var poly = polygon, v2 = polygon;
+    if (v2.length < 3) {
+      return result;
+    }
+    level++;
+    if (level > maxlevel) {
+      console.warn("quickDecomp: max level (" + maxlevel + ") reached.");
+      return result;
+    }
+    for (var i = 0; i < polygon.length; ++i) {
+      if (polygonIsReflex(poly, i)) {
+        reflexVertices.push(poly[i]);
+        upperDist = lowerDist = Number.MAX_VALUE;
+        for (var j = 0; j < polygon.length; ++j) {
+          if (isLeft(polygonAt(poly, i - 1), polygonAt(poly, i), polygonAt(poly, j)) && isRightOn(polygonAt(poly, i - 1), polygonAt(poly, i), polygonAt(poly, j - 1))) {
+            p2 = getIntersectionPoint(polygonAt(poly, i - 1), polygonAt(poly, i), polygonAt(poly, j), polygonAt(poly, j - 1));
+            if (isRight(polygonAt(poly, i + 1), polygonAt(poly, i), p2)) {
+              d = sqdist(poly[i], p2);
+              if (d < lowerDist) {
+                lowerDist = d;
+                lowerInt = p2;
+                lowerIndex = j;
+              }
+            }
+          }
+          if (isLeft(polygonAt(poly, i + 1), polygonAt(poly, i), polygonAt(poly, j + 1)) && isRightOn(polygonAt(poly, i + 1), polygonAt(poly, i), polygonAt(poly, j))) {
+            p2 = getIntersectionPoint(polygonAt(poly, i + 1), polygonAt(poly, i), polygonAt(poly, j), polygonAt(poly, j + 1));
+            if (isLeft(polygonAt(poly, i - 1), polygonAt(poly, i), p2)) {
+              d = sqdist(poly[i], p2);
+              if (d < upperDist) {
+                upperDist = d;
+                upperInt = p2;
+                upperIndex = j;
+              }
+            }
+          }
+        }
+        if (lowerIndex === (upperIndex + 1) % polygon.length) {
+          p2[0] = (lowerInt[0] + upperInt[0]) / 2;
+          p2[1] = (lowerInt[1] + upperInt[1]) / 2;
+          steinerPoints.push(p2);
+          if (i < upperIndex) {
+            polygonAppend(lowerPoly, poly, i, upperIndex + 1);
+            lowerPoly.push(p2);
+            upperPoly.push(p2);
+            if (lowerIndex !== 0) {
+              polygonAppend(upperPoly, poly, lowerIndex, poly.length);
+            }
+            polygonAppend(upperPoly, poly, 0, i + 1);
+          } else {
+            if (i !== 0) {
+              polygonAppend(lowerPoly, poly, i, poly.length);
+            }
+            polygonAppend(lowerPoly, poly, 0, upperIndex + 1);
+            lowerPoly.push(p2);
+            upperPoly.push(p2);
+            polygonAppend(upperPoly, poly, lowerIndex, i + 1);
+          }
+        } else {
+          if (lowerIndex > upperIndex) {
+            upperIndex += polygon.length;
+          }
+          closestDist = Number.MAX_VALUE;
+          if (upperIndex < lowerIndex) {
+            return result;
+          }
+          for (var j = lowerIndex; j <= upperIndex; ++j) {
+            if (isLeftOn(polygonAt(poly, i - 1), polygonAt(poly, i), polygonAt(poly, j)) && isRightOn(polygonAt(poly, i + 1), polygonAt(poly, i), polygonAt(poly, j))) {
+              d = sqdist(polygonAt(poly, i), polygonAt(poly, j));
+              if (d < closestDist && polygonCanSee2(poly, i, j)) {
+                closestDist = d;
+                closestIndex = j % polygon.length;
+              }
+            }
+          }
+          if (i < closestIndex) {
+            polygonAppend(lowerPoly, poly, i, closestIndex + 1);
+            if (closestIndex !== 0) {
+              polygonAppend(upperPoly, poly, closestIndex, v2.length);
+            }
+            polygonAppend(upperPoly, poly, 0, i + 1);
+          } else {
+            if (i !== 0) {
+              polygonAppend(lowerPoly, poly, i, v2.length);
+            }
+            polygonAppend(lowerPoly, poly, 0, closestIndex + 1);
+            polygonAppend(upperPoly, poly, closestIndex, i + 1);
+          }
+        }
+        if (lowerPoly.length < upperPoly.length) {
+          polygonQuickDecomp(lowerPoly, result, reflexVertices, steinerPoints, delta, maxlevel, level);
+          polygonQuickDecomp(upperPoly, result, reflexVertices, steinerPoints, delta, maxlevel, level);
+        } else {
+          polygonQuickDecomp(upperPoly, result, reflexVertices, steinerPoints, delta, maxlevel, level);
+          polygonQuickDecomp(lowerPoly, result, reflexVertices, steinerPoints, delta, maxlevel, level);
+        }
+        return result;
+      }
+    }
+    result.push(polygon);
+    return result;
+  }
+  function polygonRemoveCollinearPoints(polygon, precision) {
+    var num = 0;
+    for (var i = polygon.length - 1; polygon.length > 3 && i >= 0; --i) {
+      if (collinear(polygonAt(polygon, i - 1), polygonAt(polygon, i), polygonAt(polygon, i + 1), precision)) {
+        polygon.splice(i % polygon.length, 1);
+        num++;
+      }
+    }
+    return num;
+  }
+  function polygonRemoveDuplicatePoints(polygon, precision) {
+    for (var i = polygon.length - 1; i >= 1; --i) {
+      var pi = polygon[i];
+      for (var j = i - 1; j >= 0; --j) {
+        if (points_eq(pi, polygon[j], precision)) {
+          polygon.splice(i, 1);
+          continue;
+        }
+      }
+    }
+  }
+  function scalar_eq(a, b, precision) {
+    precision = precision || 0;
+    return Math.abs(a - b) <= precision;
+  }
+  function points_eq(a, b, precision) {
+    return scalar_eq(a[0], b[0], precision) && scalar_eq(a[1], b[1], precision);
+  }
+  return src;
+}
+var srcExports = requireSrc();
+const index = /* @__PURE__ */ getDefaultExportFromCjs(srcExports);
+const index$1 = /* @__PURE__ */ _mergeNamespaces({
+  __proto__: null,
+  default: index
+}, [srcExports]);
 const Bodies = matterExports.Bodies;
 const Body = matterExports.Body;
 const Common = matterExports.Common;
@@ -14557,6 +14990,7 @@ export {
   World,
   clsx,
   debounce,
+  index$1 as polyDecomp,
   twMerge
 };
 //# sourceMappingURL=packages.js.map
